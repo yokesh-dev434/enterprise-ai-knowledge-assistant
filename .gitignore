@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+ent_ai_env/
+# Personal files
+app/uploads/yokesh_resume_new_july_27.pdf

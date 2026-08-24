@@ -1,0 +1,76 @@
+# from fastapi import FastAPI,HTTPException
+
+# app = FastAPI()
+
+
+# @app.get("/")
+# def intial_message():
+#     return {
+#         "status":"Enterprise AI Assistant Backend Running"
+#     }
+
+# @app.get("/client_information_project_version")
+# def client_project_version():
+#     return {
+#     "company": "TechNova Solutions",
+#     "module": "Enterprise AI Knowledge Assistant",
+#     "version": "1.0"
+# }
+
+# @app.get("/application_works")
+# def application_working_fine():
+#     return {
+#     "service": "healthy"
+# }
+
+
+# @app.get("/document/{document_id}")
+# def document(document_id:int):
+#     return{
+#     "document_id": document_id,
+#     "status": "Document Found"
+# }
+
+# @app.get("/documents")
+# def filter_dept(department:str):
+#     return {
+#     "department": department,
+#     "status": "Searching documents..."
+# }
+
+
+# # from fastapi import FastAPI
+
+# from pydantic import BaseModel
+
+# class EmployeeRequest(BaseModel):
+#     id:int
+#     name :str
+#     department :str
+#     salary :float
+
+
+# class EmployeeResponse(BaseModel):
+#     id:int
+#     name :str
+#     department:str
+
+
+# global_employees={}
+# global_employees_idies=set()
+# @app.post("/employee",response_model=EmployeeResponse)
+# def create_employee(employee : EmployeeRequest):
+#     global_employees[employee.id] = employee
+    
+#     global_employees_idies.add(employee.id)
+#     return employee
+
+# @app.get("/employee",response_model=EmployeeResponse)
+# def get_employee(id:int):
+#     if id not in global_employees_idies:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Employee not found"
+#         )
+#     return global_employees[id]
+######################################################
