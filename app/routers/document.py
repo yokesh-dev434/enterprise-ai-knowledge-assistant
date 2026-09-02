@@ -21,7 +21,7 @@ class Department(str, Enum):
     FINANCE = "Finance"
     ENGINEERING = "Engineering"
     CLIENT = "Client"
-    PRODUCT = "Product"
+    PRODUCT = "PROJECTS"
 
 # def save_document(file, department):
 #     department_folder = Path("app/uploads") / department
@@ -52,7 +52,7 @@ async def upload_file(file: UploadFile = File(...), department: Department = For
 
             metadata = {
                 "document_id": document_id,
-                "department": department.value,
+                "department": department.value.title(),
                 "source": file.filename,
                 "file_type": file.filename.split(".")[-1].lower()
             }
@@ -61,7 +61,7 @@ async def upload_file(file: UploadFile = File(...), department: Department = For
                 metadata
             )
             return {
-                # "document_id":document_id ,
+                "document_id":document_id ,
                 "message":"Uploaded Successfully",
                 "filename": file.filename,
                 "file_text":pdf_text,

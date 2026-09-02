@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
-
+from google.genai import types
 load_dotenv()
 
 client = genai.Client(
@@ -23,9 +23,14 @@ def generate_answer(prompt,user_query,retrived_chunks):
         User Question:
         {user_query}
         """
+    print("-"*100)
+    print(final_prompt)
     response =client.models.generate_content(
         model="gemini-3.1-flash-lite",
-        contents=final_prompt
+        contents=final_prompt,
+        config=types.GenerateContentConfig(
+            temperature=0.1
+        )
     )      
     return response.text
 

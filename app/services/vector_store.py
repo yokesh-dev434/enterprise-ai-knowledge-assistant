@@ -39,7 +39,7 @@ def search_similar(query_vector,department, top_k=3):
         must=[
             FieldCondition(
                 key="department",
-                match = MatchValue(value=department)
+                match = MatchValue(value=department.title())
             )
         ]
     )

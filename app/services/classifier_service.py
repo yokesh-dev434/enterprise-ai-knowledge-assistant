@@ -8,7 +8,7 @@ load_dotenv()
 
 
 class ClassifierResponse(BaseModel):
-    classifier :Literal["HR","IT","CLIENT","ENG","PROJECTS","FINANCE","UNKNOWN"]
+    classifier :Literal["HR","IT","Client","Engineering","PROJECTS","Finance","UNKNOWN"]
     confidence : float
 
 model = ChatGoogleGenerativeAI(model="gemini-3.6-flash")
@@ -23,10 +23,10 @@ Classify the user's query into exactly one category:
 
 HR
 IT
-CLIENT
-ENG
+Client
+Engineering
 PROJECTS
-FINANCE
+Finance
 UNKNOWN
 
 Choose the category whose documents or knowledge are most relevant to answer the user's query.
@@ -35,10 +35,10 @@ Category guide:
 
 - HR: employees, leave, attendance, performance, work policies, recruitment
 - IT: laptops, VPN, passwords, MFA, software, technical support, devices
-- CLIENT: clients, client requirements, SLA, support agreements
-- ENG: coding, Git, APIs, Docker, deployment, software development, AI development
+- Client: clients, client requirements, SLA, support agreements
+- Engineering: coding, Git, APIs, Docker, deployment, software development, AI development
 - PROJECTS: project details, project requirements, project status, project documents
-- FINANCE: expenses, reimbursement, travel, invoices, payroll, procurement
+- Finance: expenses, reimbursement, travel, invoices, payroll, procurement
 - UNKNOWN: unrelated or unclear queries
 
 Examples:
@@ -50,16 +50,16 @@ Query: "How do I connect to the company VPN?"
 IT
 
 Query: "What are the requirements from Client ABC?"
-CLIENT
+Client
 
 Query: "What is our Git branching strategy?"
-ENG
+Engineering
 
 Query: "Explain the AI Knowledge Assistant project."
 PROJECTS
 
 Query: "How do I claim travel expenses?"
-FINANCE
+Finance
 
 Query: "What is the capital of India?"
 UNKNOWN
@@ -80,3 +80,8 @@ def classifier_agent(user_query):
         "user_query":user_query
     })
     return response
+
+
+# print(classifier_agent("How do I connect to the company VPN?"))
+# print(classifier_agent("How do I submit a travel expense claim?"))
+# print(classifier_agent("What is our Git branching strategy?"))

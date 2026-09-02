@@ -1,3 +1,5 @@
+import uuid
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance,PointStruct
 
@@ -27,6 +29,7 @@ if not client.collection_exists(collection_name):
 
 
 def ingest_document(file_path, metadata):
+
     # extract
     raw_text = extract_text(file_path)
 
@@ -44,21 +47,23 @@ def ingest_document(file_path, metadata):
     print("Number of embeddings:", len(embeddings))
     print("Embedding dimension:", len(embeddings[0]))
     # store in Qdrant
+
     points = []
 
-    for i, (chunk, embedding) in enumerate(
+    for chunk_index, (chunk, embedding) in enumerate(
         zip(chunks, embeddings)
     ):
         point = PointStruct(
-            id=i,
+            id=str(uuid.uuid4()),
             vector=embedding.tolist(),
             payload={
                 "text": chunk,
                 "document_id": metadata["document_id"],
+                "chunk_index": chunk_index,
                 "department": metadata["department"],
                 "source": metadata["source"],
                 "file_type": metadata["file_type"],
-                "page": i + 1
+                "page": chunk_index + 1
             }
         )
 

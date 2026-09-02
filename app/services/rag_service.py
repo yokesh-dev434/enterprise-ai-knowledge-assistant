@@ -4,7 +4,7 @@ from .llm_service import generate_answer
 from app.services.classifier_service import classifier_agent
 
 
-SIMILARITY_THRESHOLD = 0.35
+SIMILARITY_THRESHOLD = 0.25 #0.35
 
 def answer_question(user_query):
     # meta_data_type_filtering
@@ -19,11 +19,22 @@ def answer_question(user_query):
     )[0]
 
     # 2. Search Qdrant
+    # 2. Search Qdrant
     results = search_similar(
         query_embedding,
         department=department,
         top_k=3
     )
+
+    print("Number of Qdrant results:", len(results))
+
+    for index, result in enumerate(results):
+        print(f"Chunk_{index}")
+        print("Score:", result.score)
+        print("Department:", result.payload.get("department"))
+        print("Full_text:")
+        print(result.payload.get("text"))
+        print("-" * 50)
     # print("-"*100)
     # print(results)
     # print("-"*100)
@@ -46,16 +57,28 @@ def answer_question(user_query):
         return "I couldn't find enough relevant information in the available documents."
 
     # 4. Instructions for Gemini
-    prompt = """
-    You are an enterprise knowledge assistant.
+    # prompt = """
+    # You are an enterprise knowledge assistant.
 
-    Answer the user's question using only the provided context.
+    # Answer the user's question using only the provided context.
+    
+    # Strict rule:
+    #     1)   If the answer is not available in the context,
+    #             -    say that you don't have enough information.
+    
 
-    If the answer is not available in the context,
-    say that you don't have enough information.
+    # Do not make up information.
+    # """
+    prompt = """ You are an enterprise knowledge assistant. 
 
-    Do not make up information.
-    """
+    Answer the user's question using only the provided context. 
+
+    Strict rules:
+      1. If the answer is not available in the provided context, respond: "I don't have enough information." 
+      2. Do not make up, assume, or infer information. 
+
+    Keep the answer concise and based only on the provided context. """.strip()
+
 
     # 5. Generate final answer
     answer = generate_answer(
@@ -63,5 +86,6 @@ def answer_question(user_query):
         user_query,
         retrieved_chunks
     )
-
+    print("user_query:",user_query)
+    print("Final Answer:")
     return answer
