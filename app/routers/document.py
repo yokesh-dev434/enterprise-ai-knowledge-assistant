@@ -1,18 +1,17 @@
-from fastapi import APIRouter,HTTPException,UploadFile,File,Form
-from pydantic import BaseModel
+from fastapi import APIRouter,HTTPException,UploadFile,File,Form,Depends
+from enum import Enum
 import uuid
+
+
 from app.services.document_service import save_document
 from app.services.document_processor import extract_text
 from app.ingestion.ingest_document import ingest_document
+from app.services.auth_service import get_current_user
 
 document_router = APIRouter(prefix="/documents",tags=["document"])
 
 
-import os
 
-from pathlib import Path
-
-from enum import Enum
 
 
 class Department(str, Enum):
@@ -23,17 +22,7 @@ class Department(str, Enum):
     CLIENT = "Client"
     PRODUCT = "PROJECTS"
 
-# def save_document(file, department):
-#     department_folder = Path("app/uploads") / department
 
-#     department_folder.mkdir(
-#         parents=True,
-#         exist_ok=True
-#     )
-
-#     destination_path = department_folder / file.filename
-
-#     return destination_path
 
 
 def mb_to_bytes(mb_size):
@@ -41,8 +30,8 @@ def mb_to_bytes(mb_size):
     return mb_size * 1024 * 1024
 
 @document_router.post("/")
-async def upload_file(file: UploadFile = File(...), department: Department = Form(...)):
-    if file.filename.endswith((".pdf",".txt",".docx")) :# bytes 10 mb
+async def upload_file(file: UploadFile = File(...), department: Department = Form(...), current_user: dict = Depends(get_current_user)):
+    if file.filename.lower().endswith((".pdf",".txt",".docx")) :# bytes 10 mb
         if file.size <= mb_to_bytes(10):
             document_id = str(uuid.uuid4())
 

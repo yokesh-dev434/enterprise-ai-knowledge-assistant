@@ -1,86 +1,346 @@
-import os
-import fitz
-from docx import Document
+# from langchain_text_splitters import RecursiveCharacterTextSplitter
+# from docx2pdf import convert
+# import fitz
+# import os
+
+# def extract_text(file_path):
+
+#     extension = os.path.splitext(file_path)[1].lower()
+
+#     # ---------------- PDF ----------------
+#     if extension == ".pdf":
+
+#         doc = fitz.open(file_path)
+
+#         pages = []
+
+#         for page_number, page in enumerate(doc, start=1):
+
+#             text = page.get_text()
+
+#             pages.append({
+#                 "text": text,
+#                 "page": page_number
+#             })
+
+#         doc.close()
+
+#         return pages
+
+#     # ---------------- DOCX ----------------
+#     elif extension == ".docx":
+
+#         # Create PDF path
+#         pdf_path = os.path.splitext(file_path)[0] + ".pdf"
+
+#         # Convert DOCX -> PDF
+#         convert(file_path, pdf_path)
+
+#         print(f"DOCX converted to PDF: {pdf_path}")
+
+#         # Now extract PDF
+#         doc = fitz.open(pdf_path)
+
+#         pages = []
+
+#         for page_number, page in enumerate(doc, start=1):
+
+#             text = page.get_text()
+
+#             pages.append({
+#                 "text": text,
+#                 "page": page_number
+#             })
+
+#         doc.close()
+
+#         return pages
+
+#     # ---------------- TXT ----------------
+#     elif extension == ".txt":
+
+#         with open(file_path, "r", encoding="utf-8") as file:
+
+#             text = file.read()
+
+#         return [{
+#             "text": text,
+#             "page": 1
+#         }]
+
+#     else:
+
+#         raise ValueError(
+#             f"Unsupported file type: {extension}"
+#         )
+
+
+# def clean_text(raw_text_temp):
+
+#     if isinstance(raw_text_temp, list):
+
+#         cleaned_pages = []
+
+#         for page in raw_text_temp:
+
+#             text = page["text"]
+
+#             cleaned_text = ""
+#             previous_empty = False
+
+#             for line in text.splitlines():
+
+#                 if line == "":
+#                     if previous_empty:
+#                         continue
+#                     else:
+#                         cleaned_text += "\n"
+#                         previous_empty = True
+
+#                 else:
+#                     text_line = " ".join(line.split())
+#                     cleaned_text += text_line + "\n"
+#                     previous_empty = False
+
+#             cleaned_pages.append({
+#                 "text": cleaned_text.strip(),
+#                 "page": page["page"]
+#             })
+
+#         return cleaned_pages
+
+#     # DOCX / TXT
+#     cleaned_text = ""
+#     previous_empty = False
+
+#     for line in raw_text_temp.splitlines():
+
+#         if line == "":
+#             if previous_empty:
+#                 continue
+#             else:
+#                 cleaned_text += "\n"
+#                 previous_empty = True
+
+#         else:
+#             text_line = " ".join(line.split())
+#             cleaned_text += text_line + "\n"
+#             previous_empty = False
+
+#     return cleaned_text.strip()
+
+
+# def chunk_text(cleaned_text, chunk_size=800, chunk_overlap=100):
+
+#     splitter = RecursiveCharacterTextSplitter(
+#         chunk_size=chunk_size,
+#         chunk_overlap=chunk_overlap
+#     )
+
+#     # PDF
+#     if isinstance(cleaned_text, list):
+
+#         chunks = []
+
+#         for page in cleaned_text:
+
+#             page_chunks = splitter.split_text(page["text"])
+
+#             for chunk in page_chunks:
+#                 chunks.append({
+#                     "text": chunk,
+#                     "page": page["page"]
+#                 })
+
+#         return chunks
+
+#     # DOCX / TXT
+#     return [
+#         {
+#             "text": chunk,
+#             "page": None
+#         }
+#         for chunk in splitter.split_text(cleaned_text)
+#     ]
+
+
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-# class DocumentProcessor:
+from docx2pdf import convert
+import fitz
+import os
 
-# extract a text
+
 def extract_text(file_path):
 
     extension = os.path.splitext(file_path)[1].lower()
-    # PDF
+
+    # ---------------- PDF ----------------
+
     if extension == ".pdf":
 
         doc = fitz.open(file_path)
 
-        final_text = ""
+        pages = []
 
-        for page in doc:
+        for page_number, page in enumerate(doc, start=1):
+
             text = page.get_text()
-            final_text += text + "\n"
 
-        return final_text
-    # DOCX
+            pages.append({
+                "text": text,
+                "page": page_number
+            })
+
+        doc.close()
+
+        return pages
+
+    # ---------------- DOCX ----------------
+
     elif extension == ".docx":
 
-        doc = Document(file_path)
+        # Convert DOCX to PDF
+        pdf_path = os.path.splitext(file_path)[0] + ".pdf"
 
-        final_text = ""
+        convert(file_path, pdf_path)
 
-        for paragraph in doc.paragraphs:
-            final_text += paragraph.text + "\n"
+        # Extract text from converted PDF
+        doc = fitz.open(pdf_path)
 
-        return final_text
+        pages = []
 
-    # TXT
+        for page_number, page in enumerate(doc, start=1):
+
+            text = page.get_text()
+
+            pages.append({
+                "text": text,
+                "page": page_number
+            })
+
+        doc.close()
+
+        return pages
+
+    # ---------------- TXT ----------------
+
     elif extension == ".txt":
 
         with open(file_path, "r", encoding="utf-8") as file:
-            return file.read()
+
+            text = file.read()
+
+        return [{
+            "text": text,
+            "page": 1
+        }]
 
     else:
+
         raise ValueError(
             f"Unsupported file type: {extension}"
         )
 
-# cleaning the text
+
 def clean_text(raw_text_temp):
-    tem_raw_text=""
-    previous_empty=False
+
+    # PDF / DOCX converted to PDF
+    if isinstance(raw_text_temp, list):
+
+        cleaned_pages = []
+
+        for page in raw_text_temp:
+
+            text = page["text"]
+
+            cleaned_text = ""
+            previous_empty = False
+
+            for line in text.splitlines():
+
+                if line == "":
+
+                    if previous_empty:
+                        continue
+
+                    cleaned_text += "\n"
+                    previous_empty = True
+
+                else:
+
+                    text_line = " ".join(line.split())
+
+                    cleaned_text += text_line + "\n"
+                    previous_empty = False
+
+            cleaned_pages.append({
+                "text": cleaned_text.strip(),
+                "page": page["page"]
+            })
+
+        return cleaned_pages
+
+    # TXT
+    cleaned_text = ""
+    previous_empty = False
+
     for line in raw_text_temp.splitlines():
-        if line =="":
-            if previous_empty:# true
+
+        if line == "":
+
+            if previous_empty:
                 continue
-            else:
-                tem_raw_text+="\n"
-                previous_empty=True
+
+            cleaned_text += "\n"
+            previous_empty = True
+
         else:
-            text = " ".join(line.split())
-            tem_raw_text+=text+"\n"
-            previous_empty=False
-    return tem_raw_text.strip()
 
-# chunking the cleaned text
-# def chunk_text(cleaned_text,chunk_size,chunk_overlap):
-#     chunks=[]
-#     step =chunk_size-chunk_overlap
-#     for i in range(0,len(cleaned_text),step):
-#         chunk=cleaned_text[i:i+chunk_size]
-#         # print(len(chunk))
-#         # if chunk_size != len(chunk):
-#         #     break
-#         chunks.append(chunk)
+            text_line = " ".join(line.split())
 
-#     return chunks
+            cleaned_text += text_line + "\n"
+            previous_empty = False
+
+    return cleaned_text.strip()
 
 
+def chunk_text(
+    cleaned_text,
+    chunk_size=800,
+    chunk_overlap=100
+):
 
-
-def chunk_text(cleaned_text,chunk_size=800,chunk_overlap=100):
-    splitter =RecursiveCharacterTextSplitter(
-        chunk_size = chunk_size,
-        chunk_overlap = chunk_overlap
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap
     )
-    chunks = splitter.split_text(cleaned_text)
-    return chunks
+
+    # PDF / DOCX converted to PDF
+    if isinstance(cleaned_text, list):
+
+        chunks = []
+
+        for page in cleaned_text:
+
+            page_chunks = splitter.split_text(
+                page["text"]
+            )
+
+            for chunk in page_chunks:
+
+                chunks.append({
+                    "text": chunk,
+                    "page": page["page"]
+                })
+
+        return chunks
+
+    # TXT fallback
+    return [
+        {
+            "text": chunk,
+            "page": None
+        }
+        for chunk in splitter.split_text(cleaned_text)
+    ]

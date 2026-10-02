@@ -8,10 +8,11 @@ load_dotenv()
 
 
 class ClassifierResponse(BaseModel):
-    classifier :Literal["HR","IT","Client","Engineering","PROJECTS","Finance","UNKNOWN"]
+    classifier :Literal["HR","IT","Client","Engineering","PROJECTS","Finance","UNKNOWN","GREETING","ACKNOWLEDGEMENT"]
     confidence : float
 
-model = ChatGoogleGenerativeAI(model="gemini-3.6-flash")
+# model = ChatGoogleGenerativeAI(model="gemini-3.6-flash")
+model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
 
 structured_model = model.with_structured_output(ClassifierResponse)
 
@@ -27,6 +28,8 @@ Client
 Engineering
 PROJECTS
 Finance
+GREETING
+ACKNOWLEDGEMENT
 UNKNOWN
 
 Choose the category whose documents or knowledge are most relevant to answer the user's query.
@@ -40,6 +43,8 @@ Category guide:
 - PROJECTS: project details, project requirements, project status, project documents
 - Finance: expenses, reimbursement, travel, invoices, payroll, procurement
 - UNKNOWN: unrelated or unclear queries
+- GREETING: hello, hi, good morning, hey there, conversation openers, salutations
+- ACKNOWLEDGEMENT: got it, understood, thanks, ok, clear, message receipt, confirmation, validation
 
 Examples:
 
@@ -60,6 +65,12 @@ PROJECTS
 
 Query: "How do I claim travel expenses?"
 Finance
+
+Query:"good morning"
+GREETING 
+
+Query:"thank you"
+ACKNOWLEDGEMENT
 
 Query: "What is the capital of India?"
 UNKNOWN

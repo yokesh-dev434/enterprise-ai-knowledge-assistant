@@ -5,3 +5,16 @@ __pycache__/
 ent_ai_env/
 # Personal files
 app/uploads/yokesh_resume_new_july_27.pdf
+
+# Local testing files
+app/reset_qdrant.py
+app/test_rag.py
+app/testing.txt
+yoki_testing.py
+sample.ipynb
+
+
+# Local knowledge-base documents
+data/documents/
+
+
