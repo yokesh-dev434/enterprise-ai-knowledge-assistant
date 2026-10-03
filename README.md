@@ -376,6 +376,7 @@ Employee_Handbook - Page 2
 This allows users to identify where the retrieved information came from.
 
 ### Project Structure
+```text
 enterprise-ai-knowledge-assistant/
 │
 ├── app/
@@ -423,6 +424,7 @@ enterprise-ai-knowledge-assistant/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+```
 ## Technology Stack
 
 | Category | Technology |
