@@ -102,8 +102,8 @@ The application also includes JWT-based authentication, Redis-powered conversati
              │ Answer + Sources  │
              │   + Page Number   │
              └───────────────────┘
-
-RAG Pipeline
+```
+### RAG Pipeline
 
 The application follows a complete Retrieval-Augmented Generation pipeline.
 
@@ -375,7 +375,7 @@ Employee_Handbook - Page 2
 
 This allows users to identify where the retrieved information came from.
 
-Project Structure
+### Project Structure
 enterprise-ai-knowledge-assistant/
 │
 ├── app/
