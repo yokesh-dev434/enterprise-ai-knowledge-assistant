@@ -313,7 +313,7 @@ Return a fallback response when sufficient information is unavailable
 If relevant information cannot be found, the application returns:
 
 I couldn't find enough relevant information in the available documents.
-Conversation Memory
+## Conversation Memory
 
 Redis is used to maintain conversation history.
 
@@ -330,13 +330,13 @@ Redis is also used to maintain available chat sessions.
 
 Conversation history is used by the standalone query rewriting component to understand follow-up questions.
 
-Authentication
+## Authentication
 
 The application uses JWT-based authentication.
 
 Protected endpoints require a valid JWT token.
 
-Authentication flow:
+## Authentication flow:
 
 Login
   ↓
@@ -354,14 +354,15 @@ Protected Endpoint Access
 
 The current project uses a simple demo login credential rather than a database-backed employee/user management system.
 
-Production improvements would include:
+## Production improvements would include:
 
 Database-backed users
 Password hashing
 Employee registration/management
 Role-based access control
 User-specific permissions
-Source References
+
+## Source References
 
 The application returns source information along with answers.
 
@@ -476,7 +477,7 @@ Uploads and ingests a PDF, DOCX, or TXT document.
 
 The endpoint accepts a department along with the document.
 
-Supported departments:
+## Supported departments:
 
 HR
 IT
@@ -484,10 +485,11 @@ Finance
 Engineering
 Client
 PROJECTS
-Running the Project
+
+## Running the Project
 Prerequisites
 
-Install the following:
+## Install the following:
 
 Python
 Docker
@@ -539,27 +541,29 @@ Redis will be available at:
 localhost:6379
 #### 7. Start FastAPI
 
-Run:
+#### Run:
 
 uvicorn app.main:app --reload
 
-FastAPI will run at:
+#### FastAPI will run at:
 
 http://127.0.0.1:8000
 
-Swagger API documentation:
+#### Swagger API documentation:
 
 http://127.0.0.1:8000/docs
 #### 8. Start Streamlit
 
-Open another terminal and run:
+#### Open another terminal and run:
 
 streamlit run streamlit_app.py
 
 The Streamlit application will open in the browser.
 
-Application Workflow
+#### Application Workflow
+```text
 Document Upload
+
 Login
   ↓
 Document Upload
@@ -577,7 +581,9 @@ Chunking
 Embedding Generation
   ↓
 Qdrant Storage
-Question Answering
+```
+#### Question Answering
+```text
 Login
   ↓
 Ask Question
@@ -601,6 +607,7 @@ Gemini
 Answer + Sources
   ↓
 Store Conversation in Redis
+```
 Example
 
 Suppose the company has an internal VPN document.
@@ -621,11 +628,12 @@ The system:
 #### 8. Generates the answer
 #### 9. Returns the source and page number
 #### 10. Stores the conversation in Redis
+
 Error and Fallback Handling
 
 The application includes fallback handling for several situations.
 
-Unknown Department
+#### Unknown Department
 
 If the classifier cannot identify a relevant department:
 
@@ -752,7 +760,7 @@ This project was developed to understand how an enterprise-oriented AI knowledge
 
 Key Learning Outcomes
 
-Through this project, I worked with:
+#### Through this project, I worked with:
 
 RAG architecture
 Document ingestion pipelines
