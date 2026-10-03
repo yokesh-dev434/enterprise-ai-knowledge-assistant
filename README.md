@@ -136,7 +136,7 @@ Relevant Context
 Gemini
    ↓
 Final Answer
-1. Document Ingestion
+#### 1. Document Ingestion
 
 The application accepts:
 
@@ -163,7 +163,7 @@ For PDF documents, page numbers are preserved during extraction.
 
 For DOCX documents, the document is converted to PDF before page-based extraction.
 
-2. Text Chunking
+#### 2. Text Chunking
 
 Documents are divided into smaller chunks using:
 
@@ -185,7 +185,7 @@ source
 file_type
 page
 text
-3. Embeddings
+#### 3. Embeddings
 
 The project uses the Hugging Face embedding model:
 
@@ -199,7 +199,7 @@ Each document chunk is converted into a 384-dimensional vector.
 
 The user's query is also converted into a vector before semantic search.
 
-4. Vector Database
+#### 4. Vector Database
 
 The project uses:
 
@@ -216,7 +216,7 @@ Distance: COSINE
 
 Qdrant is used to perform semantic similarity search over document chunks.
 
-5. Department Classification
+#### 5. Department Classification
 
 Before retrieving documents, the user's standalone query is classified into a department.
 
@@ -246,7 +246,7 @@ The department classification is then used to filter the Qdrant search.
 
 This helps prevent retrieval from unrelated departments.
 
-6. Conversational Query Rewriting
+#### 6. Conversational Query Rewriting
 
 The application supports conversational questions.
 
@@ -275,7 +275,7 @@ Standalone Query
 
 This improves retrieval for follow-up questions.
 
-7. Semantic Retrieval
+#### 7. Semantic Retrieval
 
 After query rewriting and department classification:
 
@@ -298,7 +298,7 @@ Only relevant results above the configured similarity threshold are passed to th
 Current threshold:
 
 0.25
-8. Answer Generation
+#### 8. Answer Generation
 
 Retrieved document chunks are provided to Gemini as context.
 
@@ -493,10 +493,10 @@ Git
 
 You also need a Google Gemini API key.
 
-1. Clone the Repository
+#### 1. Clone the Repository
 git clone https://github.com/yokesh-dev434/enterprise-ai-knowledge-assistant.git
 cd enterprise-ai-knowledge-assistant
-2. Create a Virtual Environment
+#### 2. Create a Virtual Environment
 
 Windows:
 
@@ -505,9 +505,9 @@ python -m venv ent_ai_env
 Activate it:
 
 ent_ai_env\Scripts\activate
-3. Install Dependencies
+#### 3. Install Dependencies
 pip install -r requirements.txt
-4. Configure Environment Variables
+#### 4. Configure Environment Variables
 
 Create a .env file in the project root.
 
@@ -517,7 +517,7 @@ SECRET_KEY=your_secret_key
 
 Do not commit the .env file to GitHub.
 
-5. Start Qdrant
+#### 5. Start Qdrant
 
 Run Qdrant using Docker:
 
@@ -526,7 +526,7 @@ docker run -p 6333:6333 qdrant/qdrant
 Qdrant will be available at:
 
 http://localhost:6333
-6. Start Redis
+#### 6. Start Redis
 
 Run Redis using Docker:
 
@@ -535,7 +535,7 @@ docker run -d --name redis -p 6379:6379 redis
 Redis will be available at:
 
 localhost:6379
-7. Start FastAPI
+#### 7. Start FastAPI
 
 Run:
 
@@ -548,7 +548,7 @@ http://127.0.0.1:8000
 Swagger API documentation:
 
 http://127.0.0.1:8000/docs
-8. Start Streamlit
+#### 8. Start Streamlit
 
 Open another terminal and run:
 
@@ -609,16 +609,16 @@ How do employees connect to the VPN?
 
 The system:
 
-1. Receives the question
-2. Classifies it as IT
-3. Generates an embedding
-4. Searches IT documents in Qdrant
-5. Retrieves relevant chunks
-6. Applies the similarity threshold
-7. Sends the relevant context to Gemini
-8. Generates the answer
-9. Returns the source and page number
-10. Stores the conversation in Redis
+#### 1. Receives the question
+#### 2. Classifies it as IT
+#### 3. Generates an embedding
+#### 4. Searches IT documents in Qdrant
+#### 5. Retrieves relevant chunks
+#### 6. Applies the similarity threshold
+#### 7. Sends the relevant context to Gemini
+#### 8. Generates the answer
+#### 9. Returns the source and page number
+#### 10. Stores the conversation in Redis
 Error and Fallback Handling
 
 The application includes fallback handling for several situations.
@@ -775,12 +775,12 @@ Error handling
 Source attribution
 Repository
 
-GitHub:
+#### GitHub:
 
 https://github.com/yokesh-dev434/enterprise-ai-knowledge-assistant
 
-Author
+#### Author
 
 Yokesh P
 
-AI Engineer | Python Developer | RAG | AI Agents | FastAPI
+#### AI Engineer | Python Developer | RAG | AI Agents | FastAPI
